@@ -7,12 +7,11 @@ class ChurchBase(BaseModel):
     Shared properties across all schemas.
     Helps avoid repeating code for field definitions.
     """
-    name: str = Field(..., example="San Agustin Church")
-    address: str = Field(..., example="General Luna St")
-    city: str = Field(..., example="Intramuros, Manila")
-    province: str = Field(..., example="Metro Manila")
+    name: str = Field(..., example="A-Hill Church of Christ")
+    address: str = Field(..., example="98 Parisas St, Camp 7, Baguio City")
+    city: str = Field(..., example="Baguio City")
+    province: str = Field(..., example="Benguet")
     contact_number: Optional[str] = Field(None, example="+63 2 8527 2746")
-    description: Optional[str] = Field(None, example="A historic Roman Catholic church.")
 
 class ChurchCreate(ChurchBase):
     """
