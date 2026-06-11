@@ -24,3 +24,8 @@ class ChurchRepository:
     def get_all(db: Session) -> list[Church]:
         """Retrieves all church records."""
         return db.query(Church).all()
+    
+    @staticmethod
+    def get_by_id(db: Session, church_id: int) -> Church | None:
+        """Retrieves a single church record by its ID. Returns None if not found."""
+        return db.query(Church).filter(Church.id == church_id).first()
