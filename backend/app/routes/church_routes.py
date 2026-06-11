@@ -52,7 +52,7 @@ def read_church(church_id: int, db: Session = Depends(get_db)):
         )
     return church
 
-# UPDATE CHURCH (The New Endpoint)
+# UPDATE CHURCH
 @router.put("/{church_id}", response_model=ChurchResponse)
 def update_church(church_id: int, church_data: ChurchUpdate, db: Session = Depends(get_db)):
     """
@@ -65,7 +65,7 @@ def update_church(church_id: int, church_data: ChurchUpdate, db: Session = Depen
             detail=f"Church with ID {church_id} not found"
         )
     
-    # Convert Pydantic data into a dictionary, skipping fields that weren't provided
+    # Convert Pydantic data into a dictionary, skipping fields that were not provided
     update_data = church_data.model_dump(exclude_unset=True)
     
     # Dynamically update only the fields present in the request body
@@ -75,3 +75,20 @@ def update_church(church_id: int, church_data: ChurchUpdate, db: Session = Depen
     db.commit()
     db.refresh(db_church)
     return db_church
+
+# DELETE CHURCH (The New Endpoint)
+@router.delete("/{church_id}", status_code=status.HTTP_200_OK)
+def delete_church(church_id: int, db: Session = Depends(get_db)):
+    """
+    Remove a church record permanently from the database by its unique ID.
+    """
+    db_church = db.query(Church).filter(Church.id == church_id).first()
+    if not db_church:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Church with ID {church_id} not found"
+        )
+    
+    db.delete(db_church)
+    db.commit()
+    return {"message": "Church deleted successfully"}
